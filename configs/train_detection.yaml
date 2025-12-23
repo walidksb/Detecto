@@ -1,0 +1,21 @@
+project:
+  seed: 42
+
+data:
+  train_images: "data/processed/crack500/images/train"
+  train_masks:  "data/processed/crack500/masks/train"
+  val_images:   "data/processed/crack500/images/val"
+  val_masks:    "data/processed/crack500/masks/val"
+
+training:
+  epochs: 2
+  batch_size: 2
+  learning_rate: 0.001
+  image_size: 512
+  num_workers: 2
+
+model:
+  name: "SimpleUNet"
+
+output:
+  checkpoints_dir: "detection/models/checkpoints"
