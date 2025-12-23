@@ -1,0 +1,56 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+
+# =========================
+# Virtual environment
+# =========================
+venv/
+.env/
+
+# =========================
+# VS Code
+# =========================
+.vscode/
+
+# =========================
+# Operating system
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Data (VERY IMPORTANT)
+# =========================
+data/raw/
+data/processed/
+
+# =========================
+# Model artifacts
+# =========================
+detection/models/checkpoints/
+detection/models/exported/
+
+# =========================
+# Logs & outputs
+# =========================
+*.log
+logs/
+outputs/
+
+# =========================
+# Notebooks checkpoints
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# Temporary files
+# =========================
+*.tmp
+*.swp
