@@ -32,6 +32,13 @@ data/raw/
 data/processed/
 
 # =========================
+# Reconstruction artifacts
+# =========================
+reconstruction/output/
+reconstruction/colmap/
+reconstruction/images/
+
+# =========================
 # Model artifacts
 # =========================
 detection/models/checkpoints/
