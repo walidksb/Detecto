@@ -56,6 +56,8 @@ def main():
 
     # Normalize votes
     votes /= votes.max() + 1e-6
+    
+    np.save("analysis/crack_confidence.npy", votes)
 
     # Colorize
     colors = np.zeros((n_points, 3))
