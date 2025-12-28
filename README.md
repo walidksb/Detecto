@@ -20,7 +20,7 @@
 ![Alt text](images/carck_detection_3d_point_cloud.png)
 
 ### Multi-view Point Cloud Results
-![Alt text](images/multiview_crack_detection_3d_point_cloud.png.png)
+![Alt text](images/multiview_crack_detection_3d_point_cloud.png)
 
 # Modules
 - **Reconstruction:** COLMAP-based 3D reconstruction
