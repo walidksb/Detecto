@@ -1,5 +1,5 @@
 import numpy as np
-
+import pandas as pd
 
 def pcd_to_numpy(pcd):
     """
@@ -23,3 +23,11 @@ def crack_stats(confidence_path, threshold=0.3):
         "max_confidence": float(votes.max()),
         "mean_confidence": float(votes.mean()),
     }
+
+def export_confidence_csv(npy_path, csv_path):
+    votes = np.load(npy_path)
+    df = pd.DataFrame({
+        "point_id": range(len(votes)),
+        "crack_confidence": votes
+    })
+    df.to_csv(csv_path, index=False)

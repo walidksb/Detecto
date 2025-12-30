@@ -1,7 +1,6 @@
 from scene_manager import create_new_scene
 from streamlit_app.run_pipeline import run_inspection
-from streamlit_app.utils import pcd_to_numpy
-from streamlit_app.utils import crack_stats
+from streamlit_app.utils import pcd_to_numpy, crack_stats, export_confidence_csv
 from pathlib import Path
 import plotly.graph_objects as go
 import streamlit as st
@@ -51,15 +50,17 @@ if "scene_dir" in st.session_state:
             status.info("Running 3D reconstruction (COLMAP)...")
             progress.progress(20)
 
-            pcd = run_inspection(
+            pcd, ply_path = run_inspection(
                 scene_dir=st.session_state["scene_dir"],
                 model_path="detection/models/exported/crack_unet_v1.pth"
             )
+
 
             progress.progress(90)
             status.info("Finalizing 3D crack fusion...")
 
             st.session_state["pcd"] = pcd
+            st.session_state["ply_path"] = ply_path
             progress.progress(100)
             status.success("Inspection completed successfully!")
 
@@ -114,3 +115,36 @@ if "pcd" in st.session_state:
 
     st.metric("Max Crack Confidence", f"{stats['max_confidence']:.2f}")
     st.metric("Mean Confidence", f"{stats['mean_confidence']:.2f}")
+
+
+results_dir = Path(st.session_state["scene_dir"]) / "results"
+csv_path = results_dir / "crack_confidence.csv"
+
+export_confidence_csv(
+    "analysis/crack_confidence.npy",
+    csv_path
+)
+
+st.session_state["csv_path"] = csv_path
+
+st.subheader("💾 Download Results")
+
+col1, col2 = st.columns(2)
+
+with col1:
+    with open(st.session_state["ply_path"], "rb") as f:
+        st.download_button(
+            label="⬇ Download 3D Crack Point Cloud (.ply)",
+            data=f,
+            file_name="crack_localization.ply",
+            mime="application/octet-stream"
+        )
+
+with col2:
+    with open(st.session_state["csv_path"], "rb") as f:
+        st.download_button(
+            label="⬇ Download Crack Confidence (.csv)",
+            data=f,
+            file_name="crack_confidence.csv",
+            mime="text/csv"
+        )
