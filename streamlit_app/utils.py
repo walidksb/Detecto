@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from pathlib import Path
 
 def pcd_to_numpy(pcd):
     """
@@ -25,9 +26,15 @@ def crack_stats(confidence_path, threshold=0.3):
     }
 
 def export_confidence_csv(npy_path, csv_path):
+    csv_path = Path(csv_path)
+
+    # Ensure parent directory exists
+    csv_path.parent.mkdir(parents=True, exist_ok=True)
+
     votes = np.load(npy_path)
     df = pd.DataFrame({
         "point_id": range(len(votes)),
         "crack_confidence": votes
     })
+
     df.to_csv(csv_path, index=False)
