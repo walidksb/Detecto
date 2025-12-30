@@ -7,36 +7,39 @@ from fusion.load_intrinsics import load_colmap_intrinsics
 from detection.inference.predict_mask import load_model, predict_crack_mask
 
 
-PCD_PATH = "reconstruction/output/scene2.ply"
-IMAGES_TXT = "reconstruction/colmap/scene2/images.txt"
-CAMERAS_TXT = "reconstruction/colmap/scene2/cameras.txt"
-IMAGE_DIR = "reconstruction/images/scene2"
-MODEL_PATH = "detection/models/exported/crack_unet_v1.pth"
+def project_cracks_multiview(
+    pcd_path,
+    images_txt,
+    cameras_txt,
+    image_dir,
+    model_path,
+    save_confidence_path="analysis/crack_confidence.npy",
+):
+    """
+    Project 2D crack masks from multiple views into a 3D point cloud.
+    """
 
-
-def main():
     # Load point cloud
-    pcd = o3d.io.read_point_cloud(PCD_PATH)
+    pcd = o3d.io.read_point_cloud(str(pcd_path))
     points = np.asarray(pcd.points)
     n_points = len(points)
 
     # Load cameras & intrinsics
-    cams = load_colmap_images(IMAGES_TXT)
-    intr = load_colmap_intrinsics(CAMERAS_TXT)
+    cams = load_colmap_images(images_txt)
+    intr = load_colmap_intrinsics(cameras_txt)
 
     # Load model
-    model = load_model(MODEL_PATH)
+    model = load_model(model_path)
 
     # Initialize fusion counter
     votes = np.zeros(n_points)
 
     for image_name, cam in cams.items():
-        img = cv2.imread(f"{IMAGE_DIR}/{image_name}")
+        img = cv2.imread(str(image_dir / image_name))
         if img is None:
             continue
 
         h, w = img.shape[:2]
-
         mask = predict_crack_mask(model, img)
 
         cam_intr = intr[cam["camera_id"]]
@@ -56,17 +59,14 @@ def main():
 
     # Normalize votes
     votes /= votes.max() + 1e-6
-    
-    np.save("analysis/crack_confidence.npy", votes)
 
-    # Colorize
+    # Save confidence for later analysis
+    np.save(save_confidence_path, votes)
+
+    # Colorize point cloud
     colors = np.zeros((n_points, 3))
     for i, v in enumerate(votes):
         colors[i] = [v, 0, 1 - v]  # blue → red
 
     pcd.colors = o3d.utility.Vector3dVector(colors)
-    o3d.visualization.draw_geometries([pcd])
-
-
-if __name__ == "__main__":
-    main()
+    return pcd

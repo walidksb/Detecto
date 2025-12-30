@@ -1,0 +1,71 @@
+{
+  "scene_status": "DAMAGED",
+  "num_detected_cracks": 6,
+  "inspection_parameters": {
+    "confidence_threshold": 0.6,
+    "min_crack_length": 1.0,
+    "min_cluster_points": 10
+  },
+  "cracks": [
+    {
+      "id": 0,
+      "length": 3.66,
+      "num_points": 213,
+      "center_3d": [
+        10.057,
+        5.434,
+        15.151
+      ]
+    },
+    {
+      "id": 1,
+      "length": 2.26,
+      "num_points": 76,
+      "center_3d": [
+        3.055,
+        5.303,
+        15.335
+      ]
+    },
+    {
+      "id": 2,
+      "length": 2.5,
+      "num_points": 66,
+      "center_3d": [
+        6.357,
+        5.156,
+        15.385
+      ]
+    },
+    {
+      "id": 3,
+      "length": 1.91,
+      "num_points": 36,
+      "center_3d": [
+        -0.127,
+        5.445,
+        15.487
+      ]
+    },
+    {
+      "id": 4,
+      "length": 2.49,
+      "num_points": 88,
+      "center_3d": [
+        13.477,
+        3.957,
+        15.714
+      ]
+    },
+    {
+      "id": 5,
+      "length": 1.84,
+      "num_points": 37,
+      "center_3d": [
+        -7.395,
+        5.281,
+        15.668
+      ]
+    }
+  ]
+}

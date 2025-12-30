@@ -8,8 +8,8 @@ data:
   val_masks:    "data/processed/crack500/masks/val"
 
 training:
-  epochs: 2
-  batch_size: 2
+  epochs: 30
+  batch_size: 4
   learning_rate: 0.001
   image_size: 512
   num_workers: 2
