@@ -1,11 +1,11 @@
-import streamlit as st
 from scene_manager import create_new_scene
 from streamlit_app.run_pipeline import run_inspection
-import plotly.graph_objects as go
 from streamlit_app.utils import pcd_to_numpy
-import sys
+from streamlit_app.utils import crack_stats
 from pathlib import Path
-import open3d as o3d
+import plotly.graph_objects as go
+import streamlit as st
+import sys
 
 # Add project root to PYTHONPATH
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -44,19 +44,29 @@ if uploaded_files:
 
 if "scene_dir" in st.session_state:
     if st.button("🚀 Run Inspection"):
-        with st.spinner("Running reconstruction and crack detection..."):
-            try:
-                pcd = run_inspection(
-                    scene_dir=st.session_state["scene_dir"],
-                    model_path="detection/models/exported/crack_unet_v1.pth"
-                )
+        status = st.empty()
+        progress = st.progress(0)
 
-                st.session_state["pcd"] = pcd
-                st.success("Inspection completed successfully!")
+        try:
+            status.info("Running 3D reconstruction (COLMAP)...")
+            progress.progress(20)
 
-            except Exception as e:
-                st.error("Inspection failed")
-                st.exception(e)
+            pcd = run_inspection(
+                scene_dir=st.session_state["scene_dir"],
+                model_path="detection/models/exported/crack_unet_v1.pth"
+            )
+
+            progress.progress(90)
+            status.info("Finalizing 3D crack fusion...")
+
+            st.session_state["pcd"] = pcd
+            progress.progress(100)
+            status.success("Inspection completed successfully!")
+
+        except Exception as e:
+            status.error("Inspection failed")
+            st.exception(e)
+
 
 if "pcd" in st.session_state:
     st.subheader("🧠 3D Crack Localization Result")
@@ -90,3 +100,17 @@ if "pcd" in st.session_state:
     )
 
     st.plotly_chart(fig, use_container_width=True)
+
+if "pcd" in st.session_state:
+    st.subheader("📊 Crack Statistics")
+
+    stats = crack_stats("analysis/crack_confidence.npy")
+
+    col1, col2, col3 = st.columns(3)
+
+    col1.metric("Total 3D Points", stats["total_points"])
+    col2.metric("Crack Points", stats["crack_points"])
+    col3.metric("Crack Ratio", f"{stats['crack_ratio']:.2%}")
+
+    st.metric("Max Crack Confidence", f"{stats['max_confidence']:.2f}")
+    st.metric("Mean Confidence", f"{stats['mean_confidence']:.2f}")
