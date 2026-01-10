@@ -53,7 +53,7 @@ if "scene_dir" in st.session_state:
 
             pcd, ply_path = run_inspection(
                 scene_dir=st.session_state["scene_dir"],
-                model_path="detection/models/exported/crack_unet_v1.pth"
+                model_path="detection/models/exported/crack_unet_v2.pth"
             )
 
 
