@@ -75,5 +75,7 @@ Multi-view 3D point cloud with crack localization obtained by projecting 2D crac
 * Requires sufficient image overlap
 * Detection accuracy depends on training data
 
-- contact : walid.kesbi@gmail.com
-- Developed by Walid.
+----
+
+#### Contact : walid.kesbi@gmail.com
+#### Developed by Walid.
