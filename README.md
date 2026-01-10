@@ -23,7 +23,7 @@ Manual inspection of structures is subjective and difficult to quantify, while t
 ![Alt text](images/multiview_crack_detection_3d_point_cloud.png)
 Multi-view 3D point cloud with crack localization obtained by projecting 2D crack predictions into the reconstructed geometry.
 
-# Report Example
+# Report Example ".json" file
 ```
 {
   "scene_status": "DAMAGED",
@@ -74,3 +74,6 @@ Multi-view 3D point cloud with crack localization obtained by projecting 2D crac
 * Offline inspection (not real-time)
 * Requires sufficient image overlap
 * Detection accuracy depends on training data
+
+contact : walid.kesbi@gmail.com
+Developed by Walid.
